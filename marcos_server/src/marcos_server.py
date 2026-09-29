@@ -53,7 +53,7 @@ def main(argc, argv):
     print("Server version " + SERVER_VERSION_STR)
 
     hw = hardware()
-    ifa = iface()
+    ifa = iface(hw)
     ifa.run_stream()
 
     # Cleanup
