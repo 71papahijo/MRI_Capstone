@@ -1,26 +1,7 @@
 import sys
 from pathlib import Path
 
-import common.config as config
-
-
-def get_ip_address():
-    """
-    Fetch the current IP address from the MRI4ALL configuration file.
-    Note: Because the marcos files import the configuration file via
-    "from ... import ...", multiple copies of the variable are created
-    within different scopes. Call apply_scanner_settings() after a Settings
-    save so Experiment uses the new IP, port, clock, and gradient board.
-    """
-    dummy_config = config.Configuration.load_from_file()
-    return dummy_config.scanner_ip
-
-
-## IP address: RP address or 'localhost' if emulating a local server.
-try:
-    ip_address = get_ip_address()
-except Exception:
-    ip_address = "10.42.0.251"
+ip_address = "169.254.44.172"
 
 ## Port: MaRCoS control port (default 11111)
 port = 11111

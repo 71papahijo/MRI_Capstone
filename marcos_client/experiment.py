@@ -6,12 +6,14 @@ import socket, time, warnings
 import numpy as np
 import matplotlib.pyplot as plt
 
-import external.marcos_client.local_config as marcos_cfg
-import external.marcos_client.grad_board as gb
-import external.marcos_client.server_comms as sc
-import external.marcos_client.marcompile as fc
-import common.logger as logger
-log = logger.get_logger()
+import local_config as marcos_cfg
+import grad_board as gb
+import server_comms as sc
+import marcompile as fc
+# import common.logger as logger
+# log = logger.get_logger()
+import logging
+log = logging.getLogger(__name__)
 
 import pdb
 st = pdb.set_trace

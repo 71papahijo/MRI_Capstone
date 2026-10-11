@@ -3,9 +3,9 @@
 
 import numpy as np
 import warnings
-from external.marcos_client.marmachine import *
+from marmachine import *
 try:
-    from external.marcos_client.local_config import grad_board
+    from local_config import grad_board
 except ModuleNotFoundError:
     grad_board = "gpa-fhdo"
 import pdb

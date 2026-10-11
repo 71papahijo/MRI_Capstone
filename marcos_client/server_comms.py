@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import msgpack, warnings, logging
-from external.marcos_client.marmachine import MarServerWarning
+from marmachine import MarServerWarning
 
 log = logging.getLogger("mri4all")
 
