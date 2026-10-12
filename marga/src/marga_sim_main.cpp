@@ -16,6 +16,7 @@ extern "C" {
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <cstdlib>
 }
 
 #include "version.hpp"
@@ -48,7 +49,9 @@ int main(int argc, char *argv[]) {
 
 	mm = new marga_model(argc, argv);
 	hw = new hardware();
-	ifa = new iface();
+	const char* port_env = std::getenv("MARGA_PORT");
+	unsigned port = port_env ? std::stoul(port_env) : 11111;
+	ifa = new iface(port);
 	ifa->run_stream();
 
 	// Cleanup

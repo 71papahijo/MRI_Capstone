@@ -6,6 +6,7 @@
 #include <chrono>
 #include <vector>
 #include <sys/mman.h>
+#include <cstdlib>
 
 #ifdef VERILATOR_BUILD
 #include "marga_model.hpp"
@@ -585,7 +586,10 @@ void hardware::init_mem() {
 		throw hw_error("failed to access memory device - check sudo permissions and/or platform");
 	}
 #else
-	char tempfile[100] = "/tmp/marcos_server_mem";
+	const char* tempfile = std::getenv("MARGA_MEM");
+	if (!tempfile || !*tempfile) {
+		tempfile = "/tmp/marcos_server_mem";
+	}
 
 	int fd = open(tempfile, O_RDWR);
 	if (fd < 0) {

@@ -46,3 +46,20 @@ class MultiExperiment:
         for exp_id, exp in self.exps.items():
             if exp_id in flodict:
                 exp.add_flodict(flodict[exp_id], append)
+
+    def plot_sequence(self):
+        return {
+            board_id: exp.plot_sequence()
+            for board_id, exp in self.exps.items()
+        }
+
+    def run(self):
+        rxd = {}
+        msgs = {}
+        for board_id, exp in self.exps.items():
+            rxd[board_id], msgs[board_id] = exp.run()
+        return rxd, msgs
+
+    def close_server(self, only_if_sim=False):
+        for exp in self.exps.values():
+            exp.close_server(only_if_sim=only_if_sim)

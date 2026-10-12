@@ -9,7 +9,12 @@ import multiExp as mEx
 # Same paths test_base.py uses; adjust to match
 from test_base import marga_sim_path
 
-SIM_BIN = os.path.join(marga_sim_path, "build", "marga_sim")
+from pathlib import Path
+
+SIM_BIN = str(
+    Path(__file__).resolve().parents[1]
+    / "marga" / "build" / "marga_sim"
+)
 
 # Hardcoded for 2 boards
 SIMS = {
@@ -24,8 +29,7 @@ def start_sims():
     for bid, s in SIMS.items():
         subprocess.call(["fallocate", "-l", "516KiB", s["mem"]])
         env = dict(os.environ, MARGA_PORT=str(s["port"]), MARGA_MEM=s["mem"])
-        procs[bid] = subprocess.Popen([SIM_BIN, "csv", s["csv"]], env=env,
-                                      stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        procs[bid] = subprocess.Popen([SIM_BIN, "csv", s["csv"]], env=env)
 
     for bid, s in SIMS.items():
         for _ in range(100):
