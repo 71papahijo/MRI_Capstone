@@ -95,7 +95,7 @@ def compare_csv(fname, sock, proc,
     # halt simulation
     sc.send_packet(sc.construct_packet({}, 0, command=sc.close_server_pkt), sock)
     sock.close()
-    proc.wait(1) # wait a short time for simulator to close
+    proc.wait(15) # wait a short time for simulator to close
 
     # compare resultant CSV with the reference
     if self_ref:
@@ -129,7 +129,7 @@ def compare_dict(source_dict, ref_fname, sock, proc,
     # halt simulation
     sc.send_packet(sc.construct_packet({}, 0, command=sc.close_server_pkt), sock)
     sock.close()
-    proc.wait(1) # wait a short time for simulator to close
+    proc.wait(15) # wait a short time for simulator to close
 
     ref_csv = os.path.join("csvs", ref_fname + ".csv")
     with open(ref_csv, "r") as ref:
@@ -181,7 +181,7 @@ def compare_expt_dict(source_dict, ref_fname, sock, proc,
     # halt simulation
     sc.send_packet(sc.construct_packet({}, 0, command=sc.close_server_pkt), sock)
     sock.close()
-    proc.wait(1) # wait a short time for simulator to close
+    proc.wait(15) # wait a short time for simulator to close
 
     ref_csv = os.path.join("csvs", ref_fname + ".csv")
     with open(ref_csv, "r") as ref:

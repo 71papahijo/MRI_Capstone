@@ -1,7 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import sys, os
 
-import external.marcos_client.experiment as ex  #
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'marcos_client'))
+
+import experiment as ex
 
 
 def my_first_experiment():
@@ -26,7 +29,8 @@ def my_first_experiment():
     exp.close_server(only_if_sim=True)
 
     plt.figure()
-    plt.plot(np.abs(rxd["rx1"]))
+    for i in plt.get_fignums():
+        plt.figure(i).savefig(f"fig{i}.png", dpi=120)
     plt.show()
 
 
