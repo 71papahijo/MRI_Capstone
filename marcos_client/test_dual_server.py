@@ -50,10 +50,10 @@ def multi_experiment():
     event_dict = {
         0: {
             "tx0": (np.array([50, 130, 200, 360]), np.array([0.5, 0, 0.5j, 0])),
-            "rx0_en": (np.array([400, 800]), np.array([1, 0])),
             "rx1_en": (np.array([400, 800]), np.array([1, 0])),
         },
         1: {
+            "tx0": (np.array([50, 130, 200, 360]), np.array([0.5, 0, 0.5j, 0])),
             "rx0_en": (np.array([400, 800]), np.array([1, 0])),
         },
     }
@@ -66,7 +66,14 @@ def multi_experiment():
     plt.plot(np.abs(rxd[0]["rx1"]), label="board 0, adc 1")
     plt.plot(np.abs(rxd[1]["rx0"]), label="board 1, adc 0")
     plt.legend()
-    plt.show()
+
+    for i in plt.get_fignums():
+        plt.figure(i).savefig(f"fig{i}.png", dpi=120)
+
+    plt.close("all")
+    
+
+    
 
 
 if __name__ == "__main__":
