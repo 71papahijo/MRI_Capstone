@@ -53,7 +53,8 @@ def multi_experiment():
             "rx1_en": (np.array([400, 800]), np.array([1, 0])),
         },
         1: {
-            "tx0": (np.array([50, 130, 200, 360]), np.array([0.5, 0, 0.5j, 0])),
+            "tx0": (np.array([10, 20, 30, 40]), np.array([0.5, 0, 0.5j, 0])),
+            "tx1": (np.array([50, 130, 200, 360]), np.array([0.5, 0, 0.5j, 0])),
             "rx0_en": (np.array([400, 800]), np.array([1, 0])),
         },
     }
