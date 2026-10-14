@@ -14,9 +14,9 @@ log = logging.getLogger(__name__)
 import pdb
 st = pdb.set_trace
 
+import experiment as exp
 
-
-class ExperimentController:
+class ExperimentController(exp.Experiment):
     '''
     Controller for managing and coordinating experiments across multiple boards.
     '''
