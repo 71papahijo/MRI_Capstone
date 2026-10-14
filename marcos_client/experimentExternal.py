@@ -21,46 +21,11 @@ st = pdb.set_trace
 ######## TODO: configure the final buffers as well, whether in marcompile or elsewhere
 
 class ExperimentExternal:
-    """Wrapper class for managing an entire experimental sequence
+    '''
+    Wrapper class for managing an entire experimental sequence
 
-    lo_freq: local oscillator frequencies, MHz: either single float,
-    iterable of two or iterable of three values. Control three
-    independent LOs. At least a single float must be supplied.
-    If supplying 2 or 3 values, must also specify the rx_lo.
-
-    rx_t: RF RX sampling time/s in microseconds; single float or tuple
-    of two.
-
-    rx_lo: RX local oscillator sources (integers): 0 - 2 correspond to
-    the three LO NCOs, 3 is DC. Single integer or tuple of two.  By
-    default will use local oscillator 0 for both RX channels, unless
-    otherwise specified.
-
-    Note: TX0 and TX1 will always be assigned to NCOs 0 and 1. NCO 2
-    is for free adjustment of the RX frequency relative to the TX.
-
-    csv_file: path to a CSV execution file, which will be
-    compiled with marcompile.py . If this is not supplied, the
-    sequence bytecode should be supplied manually using
-    define_sequence() before run() is called.
-
-    OPTIONAL PARAMETERS - ONLY ALTER IF YOU KNOW WHAT YOU'RE DOING
-
-    grad_max_update_rate: used to calculate the frequency to run the
-    gradient SPI interface at - must be high enough to support your
-    maximum gradient sample rate but not so high that you experience
-    communication issues. Leave this alone unless you know what you're
-    doing.
-
-    print_infos: print debugging messages from server to stdout
-
-    assert_errors: errors returned from the server will be treated as
-    exceptions by the class, halting the program
-
-    init_gpa: initialise the GPA during the construction of this class
-
-    """
-
+    builds off of experiment class but takes in port and ip instead of using a config file
+    '''
     def __init__(self,
                  ip = None,
                  port = None,

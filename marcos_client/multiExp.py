@@ -14,7 +14,8 @@ log = logging.getLogger(__name__)
 import pdb
 st = pdb.set_trace
 
-import experimentExternal as exEl
+import experimentController as exCtrl
+import experimentFollower as exFol
 
 
 '''
@@ -32,10 +33,10 @@ class MultiExperiment:
 
         for board_id, args in boards.items():
             self.event_dict[board_id] = {}
-            if board_id == 0: # TODO: later on this will be slightly different as it will need to control timing down the line 
-                self.exps[board_id] = exEl.ExperimentExternal(**{**defaults, **args})
-            else:
-                self.exps[board_id] = exEl.ExperimentExternal(**{**defaults, **args})
+            if board_id == 0:  # main system synchronizer
+                self.exps[board_id] = exCtrl.ExperimentController(**{**defaults, **args})
+            else: # recieve synchronization signals and send responses
+                self.exps[board_id] = exFol.ExperimentFollower(**{**defaults, **args})
 
     def add_intdict(self, intdict, append=True):
         for exp_id, exp in self.exps.items():
