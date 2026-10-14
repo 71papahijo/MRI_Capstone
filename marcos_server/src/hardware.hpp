@@ -64,7 +64,7 @@ private:
 	// Peripheral register addresses in PL
 	volatile uint32_t *_slcr, *_mar_base, *_ctrl, *_direct, *_exec, *_status,
 		*_status_latch, *_buf_err, *_buf_full, *_buf_empty, *_rx_locs,
-		*_rx0_i_data, *_rx1_i_data, *_rx0_q_data, *_rx1_q_data;
+		*_rx0_i_data, *_rx1_i_data, *_rx0_q_data, *_rx1_q_data, *_enable_output;
 
 	volatile char *_mar_mem;
 
