@@ -19,6 +19,7 @@ def my_first_experiment():
         # "grad_vx": (np.array([200, 700]), np.array([0.2, 0])),
         # "grad_vy": (np.array([300, 700]), np.array([0.2, 0])),
         # "grad_vz": (np.array([500, 700]), np.array([0.2, 0])),
+        "tx1": (np.array([450, 650]), np.array([1, 0])),
         "rx0_en": (np.array([400, 800]), np.array([1, 0])),  # adc 0
         "rx1_en": (np.array([400, 800]), np.array([1, 0])),  # adc 1 - gradx
     }
@@ -26,12 +27,19 @@ def my_first_experiment():
     exp.plot_sequence()
 
     rxd, msgs = exp.run()  # rxd is the array
+    print("run finished", {k: v.shape for k, v in rxd.items()})
     exp.close_server(only_if_sim=True)
 
     plt.figure()
     for i in plt.get_fignums():
         plt.figure(i).savefig(f"fig{i}.png", dpi=120)
     plt.show()
+
+    plt.figure()
+    plt.plot(np.abs(rxd["rx0"]), label="rx0")
+    plt.plot(np.abs(rxd["rx1"]), label="rx1")
+    plt.legend()
+    plt.savefig("rx.png", dpi=120)
 
 
 if __name__ == "__main__":

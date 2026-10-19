@@ -6,6 +6,7 @@ import local_config as marcos_cfg
 import grad_board as gb
 import server_comms as sc
 import marcompile as fc
+from marmachine import insta, ITRIGFOREVER
 # import common.logger as logger
 # log = logger.get_logger()
 import logging
@@ -71,11 +72,11 @@ class ExperimentController(exp.Experiment):
             self._s = prev_socket
             self._close_socket = False # do not close previous socket
 
-        reply, status = sc.command({'enable_output': 1}, self._s, assert_errors=True) # send the "enable output" command to the server
-        if reply[4].get('enable_output') != 0:
-            raise ConnectionError(
-                f"Failed to enable output on MaRCoS at {ip}:{port}"
-            )
+        # reply, status = sc.command({'enable_output': 1}, self._s, assert_errors=True) # send the "enable output" command to the server
+        # if reply[4].get('enable_output') != 0:
+        #     raise ConnectionError(
+        #         f"Failed to enable output on MaRCoS at {ip}:{port}"
+        #     )
 
         self.set_lo_freq(lo_freq)
 

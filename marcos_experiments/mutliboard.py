@@ -9,8 +9,8 @@ import multiExp as mEx
 
 
 def multi_experiment():
-    exp = mEx.MultiExperiment(boards={0: dict(ip="localhost", port = 11111, lo_freq=5, rx_t=3.125),
-                              1: dict(ip="localhost", port = 11112, lo_freq=5, rx_t=3.125)})
+    exp = mEx.MultiExperiment(boards={0: dict(ip="169.254.44.172", port = 11111, lo_freq=5, rx_t=3.125)})
+                              #1: dict(ip="localhost", port = 11112, lo_freq=5, rx_t=3.125)})
 
     # exp = mEx.MultiExperiment(boards={0: dict(ip="...", port = ""),
     #                                   1: dict(ip="...", port = "")},
@@ -22,9 +22,9 @@ def multi_experiment():
             "rx0_en": (np.array([400, 800]), np.array([1, 0])),  # adc 0
             "rx1_en": (np.array([400, 800]), np.array([1, 0])),  # adc 1 - gradx
         },
-        1: {
-            "rx0_en": (np.array([400, 800]), np.array([1, 0])),  # adc 0
-        }
+        # 1: {
+        #     "rx0_en": (np.array([400, 800]), np.array([1, 0])),  # adc 0
+        # }
     }
     exp.add_flodict(event_dict)
     exp.plot_sequence()
@@ -33,7 +33,7 @@ def multi_experiment():
     exp.close_server(only_if_sim=True)
 
     plt.plot(np.abs(rxd[0]["rx1"]))   # board 0, adc 1
-    plt.plot(np.abs(rxd[1]["rx0"]))   # board 1, adc 0
+    # plt.plot(np.abs(rxd[1]["rx0"]))   # board 1, adc 0
 
 
 if __name__ == "__main__":

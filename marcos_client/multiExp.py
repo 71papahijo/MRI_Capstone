@@ -16,6 +16,7 @@ st = pdb.set_trace
 
 import experimentController as exCtrl
 import experimentFollower as exFol
+import experimentExternal as exExt
 
 
 '''
@@ -34,7 +35,8 @@ class MultiExperiment:
         for board_id, args in boards.items():
             self.event_dict[board_id] = {}
             if board_id == 0:  # main system synchronizer
-                self.exps[board_id] = exCtrl.ExperimentController(**{**defaults, **args})
+                #self.exps[board_id] = exCtrl.ExperimentController(**{**defaults, **args})
+                self.exps[board_id] = exExt.ExperimentExternal(**{**defaults, **args})
             else: # recieve synchronization signals and send responses
                 self.exps[board_id] = exFol.ExperimentFollower(**{**defaults, **args})
 

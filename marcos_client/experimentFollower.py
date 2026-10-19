@@ -6,6 +6,7 @@ import local_config as marcos_cfg
 import grad_board as gb
 import server_comms as sc
 import marcompile as fc
+from marmachine import insta, ITRIGFOREVER
 # import common.logger as logger
 # log = logger.get_logger()
 import logging
@@ -131,3 +132,8 @@ class ExperimentFollower(exp.Experiment) :
         self._set_cic_shift = set_cic_shift
         self._flush_old_rx = flush_old_rx
         self._allow_user_init_cfg = allow_user_init_cfg
+
+    def compile(self):
+        super().compile() 
+        trig = np.array([insta(ITRIGFOREVER, 0)], dtype=np.uint32)
+        self._machine_code = np.concatenate((trig, self._machine_code))
