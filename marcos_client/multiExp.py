@@ -49,6 +49,8 @@ class MultiExperiment:
         for exp_id, exp in self.exps.items():
             if exp_id in flodict:
                 exp.add_flodict(flodict[exp_id], append)
+                print(f"Added flodict for board {exp_id}")
+                print(flodict[exp_id])
 
     def plot_sequence(self):
         return {
@@ -59,8 +61,19 @@ class MultiExperiment:
     def run(self):
         rxd = {}
         msgs = {}
+
         for board_id, exp in self.exps.items():
-            rxd[board_id], msgs[board_id] = exp.run()
+            print(f"\nRunning board {board_id}: {type(exp).__name__}")
+
+            try:
+                # Run normally; compilation happens through the usual path.
+                rxd[board_id], msgs[board_id] = exp.run()
+
+            except Exception as e:
+                print(f"Board {board_id} failed: {e}")
+                print("Machine code:", getattr(exp, "_machine_code", None))
+                raise
+
         return rxd, msgs
 
     def close_server(self, only_if_sim=False):
