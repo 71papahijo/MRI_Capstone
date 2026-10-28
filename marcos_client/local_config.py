@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-ip_address = "169.254.44.172"
+ip_address = "169.254.138.35"
 
 ## Port: MaRCoS control port (default 11111)
 port = 11111

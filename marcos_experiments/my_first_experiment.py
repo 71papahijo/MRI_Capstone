@@ -27,6 +27,7 @@ def my_first_experiment():
     exp.plot_sequence()
 
     rxd, msgs = exp.run()  # rxd is the array
+    print("messages:", msgs)
     print("run finished", {k: v.shape for k, v in rxd.items()})
     exp.close_server(only_if_sim=True)
 

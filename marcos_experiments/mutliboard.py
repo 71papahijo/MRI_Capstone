@@ -11,7 +11,7 @@ import multiExp as mEx
 #169.254.44.172
 #   169.254.44.172 
 def multi_experiment():
-    exp = mEx.MultiExperiment(boards={1: dict(ip="169.254.44.172", port = 11111, lo_freq=5, rx_t=3.125)})
+    exp = mEx.MultiExperiment(boards={1: dict(ip="169.254.138.35", port = 11111, lo_freq=5, rx_t=3.125)})
                                     #   0: dict(ip="localhost", port = 11112, lo_freq=5, rx_t=3.125)})
 
     # exp = mEx.MultiExperiment(boards={0: dict(ip="...", port = ""),

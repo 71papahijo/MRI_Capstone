@@ -6,7 +6,7 @@ import local_config as marcos_cfg
 import grad_board as gb
 import server_comms as sc
 import marcompile as fc
-from marmachine import insta, ITRIGFOREVER
+from marmachine import insta, ITRIGFOREVER, ITRIG
 # import common.logger as logger
 # log = logger.get_logger()
 import logging
