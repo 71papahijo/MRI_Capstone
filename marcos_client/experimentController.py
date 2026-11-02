@@ -139,3 +139,11 @@ class ExperimentController(exp.Experiment):
         self._set_cic_shift = set_cic_shift
         self._flush_old_rx = flush_old_rx
         self._allow_user_init_cfg = allow_user_init_cfg
+
+    def compile(self, trig_delay=None, trig_length=None):
+        if self._seq is None or 'trig_out' not in self._seq:
+            exp.Experiment.add_flodict(self, {
+                'trig_out': (np.array([trig_delay, trig_delay + trig_length, trig_delay + trig_length *2, trig_delay + trig_length *3, ]), np.array([1, 0, 1, 0]))
+            })
+        print(self._seq)
+        super().compile()

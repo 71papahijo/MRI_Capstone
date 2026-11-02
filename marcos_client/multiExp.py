@@ -36,7 +36,7 @@ class MultiExperiment:
             self.event_dict[board_id] = {}
             if board_id == 0:  # main system synchronizer
                 #self.exps[board_id] = exCtrl.ExperimentController(**{**defaults, **args})
-                self.exps[board_id] = exExt.ExperimentExternal(**{**defaults, **args})
+                self.exps[board_id] = exCtrl.ExperimentController(**{**defaults, **args})
             else: # recieve synchronization signals and send responses
                 self.exps[board_id] = exFol.ExperimentFollower(**{**defaults, **args})
 
@@ -57,10 +57,23 @@ class MultiExperiment:
             board_id: exp.plot_sequence()
             for board_id, exp in self.exps.items()
         }
+    def compile(self, trig_delay=0, trig_length=2):
+        print(f"Compiling multi-experiment with trig_delay={trig_delay} and trig_length={trig_length}")
+        for board_id, e in self.exps.items():
+            if board_id == 0:
+                print(f"Compiling board {board_id} with trig_delay={trig_delay} and trig_length={trig_length}")
+                e.compile(trig_delay=trig_delay, trig_length=trig_length)
+            else:
+                e.compile()
 
-    def run(self):
+    def run(self, trig_delay, trig_length):
         rxd = {}
         msgs = {}
+        print(f"Running multi-experiment with trig_delay={trig_delay} and trig_length={trig_length}")
+
+        for e in self.exps.values():
+            if not e._seq_compiled:
+                e.compile(trig_delay = trig_delay, trig_length = trig_length)
 
         for board_id, exp in self.exps.items():
             print(f"\nRunning board {board_id}: {type(exp).__name__}")
@@ -76,6 +89,68 @@ class MultiExperiment:
 
         return rxd, msgs
 
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+    '''
+    def run(self):
+            """ compile the TX and grad data, send everything over.
+            Returns the resultant data """
+    
+            if not self._seq_compiled:
+                self.compile()
+    
+            if self._flush_old_rx:
+                rx_data_old, _ = sc.command({'read_rx': 0}, self._s)
+                # TODO: do something with RX data previously collected by the server
+    
+            bytecode = self._machine_code.tobytes()
+            log.info("Sending run_seq (%d bytes) to MaRCoS", len(bytecode))
+            try:
+                rx_data, msgs = sc.command({'run_seq': bytecode}, self._s)
+            except (OSError, ConnectionError) as exc:
+                raise ConnectionError(
+                    f"MaRCoS closed while running the sequence ({exc}). "
+                    "Do not Ping during a scan. On the Red Pitaya, watch marcos_server for an MPack error."
+                ) from exc
+    
+            rxd = rx_data[4]['run_seq']
+            rxd_iq = {}
+    
+            # (1 << 24) just for the int->float conversion to be reasonable - exact value doesn't matter for now
+            rx0_norm_factor = self._rx0_cic_factor / (1 << 24)
+            rx1_norm_factor = self._rx0_cic_factor / (1 << 24)
+    
+            try:
+                rxd_iq['rx0'] = rx0_norm_factor * ( np.array(rxd['rx0_i']).astype(np.int32).astype(float) + \
+                                 1j * np.array(rxd['rx0_q']).astype(np.int32).astype(float) )
+            except (KeyError, TypeError):
+                pass
+    
+            try:
+                rxd_iq['rx1'] = rx1_norm_factor * ( np.array(rxd['rx1_i']).astype(np.int32).astype(float) + \
+                                 1j * np.array(rxd['rx1_q']).astype(np.int32).astype(float) )
+            except (KeyError, TypeError):
+                pass
+    
+            return rxd_iq, msgs
+    
+    
+    '''
+
     def close_server(self, only_if_sim=False):
+        
         for exp in self.exps.values():
             exp.close_server(only_if_sim=only_if_sim)
