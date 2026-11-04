@@ -143,7 +143,7 @@ class ExperimentController(exp.Experiment):
     def compile(self, trig_delay=None, trig_length=None):
         if self._seq is None or 'trig_out' not in self._seq:
             exp.Experiment.add_flodict(self, {
-                'trig_out': (np.array([trig_delay, trig_delay + trig_length, trig_delay + trig_length *2, trig_delay + trig_length *3, ]), np.array([1, 0, 1, 0]))
+                'trig_out': (np.array([trig_delay, trig_delay + trig_length ]), np.array([1, 0]))
             })
         print(self._seq)
         super().compile()
