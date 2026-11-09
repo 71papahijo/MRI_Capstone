@@ -1,0 +1,164 @@
+/dts-v1/;
+
+/ {
+
+	fragment@0 {
+		target = <0xffffffff>;
+
+		__overlay__ {
+			#address-cells = <0x01>;
+			#size-cells = <0x01>;
+			firmware-name = "ocra_mri.bit.bin";
+			phandle = <0x01>;
+		};
+	};
+
+	fragment@1 {
+		target = <0xffffffff>;
+
+		__overlay__ {
+			phandle = <0x02>;
+
+			clocking0 {
+				#clock-cells = <0x00>;
+				assigned-clock-rates = <0x88601c0>;
+				assigned-clocks = <0xffffffff 0x0f>;
+				clock-output-names = "fabric_clk";
+				clocks = <0xffffffff 0x0f>;
+				compatible = "xlnx,fclk";
+				phandle = <0x03>;
+			};
+		};
+	};
+
+	fragment@2 {
+		target = <0xffffffff>;
+
+		__overlay__ {
+			#address-cells = <0x01>;
+			#size-cells = <0x01>;
+			phandle = <0x04>;
+
+			axi_cfg_register@40000000 {
+				clock-names = "aclk";
+				clocks = <0xffffffff 0x0f>;
+				compatible = "xlnx,axi-cfg-register-1.0";
+				reg = <0x40000000 0x1000>;
+				phandle = <0x05>;
+			};
+
+			axi_dac_spi_sequencer@40060000 {
+				clock-names = "aclk\0S_AXI_ACLK";
+				clocks = <0xffffffff 0x0f 0xffffffff 0x0f>;
+				compatible = "xlnx,axi-dac-spi-sequencer-1.1";
+				reg = <0x40060000 0x10000>;
+				phandle = <0x06>;
+			};
+
+			axi_bram_writer@40002000 {
+				clock-names = "aclk";
+				clocks = <0xffffffff 0x0f>;
+				compatible = "xlnx,axi-bram-writer-1.0";
+				reg = <0x40002000 0x2000>;
+				phandle = <0x07>;
+			};
+
+			axi_bram_writer@40004000 {
+				clock-names = "aclk";
+				clocks = <0xffffffff 0x0f>;
+				compatible = "xlnx,axi-bram-writer-1.0";
+				reg = <0x40004000 0x2000>;
+				phandle = <0x08>;
+			};
+
+			axi_bram_writer@40006000 {
+				clock-names = "aclk";
+				clocks = <0xffffffff 0x0f>;
+				compatible = "xlnx,axi-bram-writer-1.0";
+				reg = <0x40006000 0x2000>;
+				phandle = <0x09>;
+			};
+
+			axi_bram_writer@40008000 {
+				clock-names = "aclk";
+				clocks = <0xffffffff 0x0f>;
+				compatible = "xlnx,axi-bram-writer-1.0";
+				reg = <0x40008000 0x2000>;
+				phandle = <0x0a>;
+			};
+
+			micro_sequencer@40040000 {
+				clock-names = "S_AXI_ACLK";
+				clocks = <0xffffffff 0x0f>;
+				compatible = "xlnx,micro-sequencer-1.0";
+				reg = <0x40040000 0x10000>;
+				phandle = <0x0b>;
+			};
+
+			axi_axis_reader@40010000 {
+				clock-names = "aclk";
+				clocks = <0xffffffff 0x0f>;
+				compatible = "xlnx,axi-axis-reader-1.0";
+				reg = <0x40010000 0x10000>;
+				phandle = <0x0c>;
+			};
+
+			axi_bram_writer@40030000 {
+				clock-names = "aclk";
+				clocks = <0xffffffff 0x0f>;
+				compatible = "xlnx,axi-bram-writer-1.0";
+				reg = <0x40030000 0x10000>;
+				phandle = <0x0d>;
+			};
+
+			axi_serial_attenuator@40050000 {
+				clock-names = "S_AXI_ACLK";
+				clocks = <0xffffffff 0x0f>;
+				compatible = "xlnx,axi-serial-attenuator-1.0";
+				reg = <0x40050000 0x10000>;
+				phandle = <0x0e>;
+			};
+
+			axi_sts_register@40001000 {
+				clock-names = "aclk";
+				clocks = <0xffffffff 0x0f>;
+				compatible = "xlnx,axi-sts-register-1.0";
+				reg = <0x40001000 0x1000>;
+				phandle = <0x0f>;
+			};
+
+			axi_bram_writer@40020000 {
+				clock-names = "aclk";
+				clocks = <0xffffffff 0x0f>;
+				compatible = "xlnx,axi-bram-writer-1.0";
+				reg = <0x40020000 0x10000>;
+				phandle = <0x10>;
+			};
+		};
+	};
+
+	__symbols__ {
+		overlay0 = "/fragment@0/__overlay__";
+		overlay1 = "/fragment@1/__overlay__";
+		clocking0 = "/fragment@1/__overlay__/clocking0";
+		overlay2 = "/fragment@2/__overlay__";
+		cfg_0 = "/fragment@2/__overlay__/axi_cfg_register@40000000";
+		gradient_dac_0_spi_sequencer_0 = "/fragment@2/__overlay__/axi_dac_spi_sequencer@40060000";
+		gradient_writerx = "/fragment@2/__overlay__/axi_bram_writer@40002000";
+		gradient_writery = "/fragment@2/__overlay__/axi_bram_writer@40004000";
+		gradient_writerz = "/fragment@2/__overlay__/axi_bram_writer@40006000";
+		gradient_writerz2 = "/fragment@2/__overlay__/axi_bram_writer@40008000";
+		micro_sequencer = "/fragment@2/__overlay__/micro_sequencer@40040000";
+		rx_0_reader_0 = "/fragment@2/__overlay__/axi_axis_reader@40010000";
+		sequence_writer = "/fragment@2/__overlay__/axi_bram_writer@40030000";
+		serial_attenuator = "/fragment@2/__overlay__/axi_serial_attenuator@40050000";
+		sts_0 = "/fragment@2/__overlay__/axi_sts_register@40001000";
+		tx_0_writer_0 = "/fragment@2/__overlay__/axi_bram_writer@40020000";
+	};
+
+	__fixups__ {
+		fpga_full = "/fragment@0:target:0";
+		amba = "/fragment@1:target:0\0/fragment@2:target:0";
+		clkc = "/fragment@1/__overlay__/clocking0:assigned-clocks:0\0/fragment@1/__overlay__/clocking0:clocks:0\0/fragment@2/__overlay__/axi_cfg_register@40000000:clocks:0\0/fragment@2/__overlay__/axi_dac_spi_sequencer@40060000:clocks:0\0/fragment@2/__overlay__/axi_dac_spi_sequencer@40060000:clocks:8\0/fragment@2/__overlay__/axi_bram_writer@40002000:clocks:0\0/fragment@2/__overlay__/axi_bram_writer@40004000:clocks:0\0/fragment@2/__overlay__/axi_bram_writer@40006000:clocks:0\0/fragment@2/__overlay__/axi_bram_writer@40008000:clocks:0\0/fragment@2/__overlay__/micro_sequencer@40040000:clocks:0\0/fragment@2/__overlay__/axi_axis_reader@40010000:clocks:0\0/fragment@2/__overlay__/axi_bram_writer@40030000:clocks:0\0/fragment@2/__overlay__/axi_serial_attenuator@40050000:clocks:0\0/fragment@2/__overlay__/axi_sts_register@40001000:clocks:0\0/fragment@2/__overlay__/axi_bram_writer@40020000:clocks:0";
+	};
+};

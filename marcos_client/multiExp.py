@@ -17,7 +17,8 @@ st = pdb.set_trace
 import experimentController as exCtrl
 import experimentFollower as exFol
 import experimentExternal as exExt
-
+from concurrent.futures import ThreadPoolExecutor
+import time
 
 '''
     exp = mEx.MultiExperiment(boards={0: dict(ip="...", lo_freq=5, rx_t=3.125),
@@ -69,88 +70,60 @@ class MultiExperiment:
     def run(self, trig_delay, trig_length):
         rxd = {}
         msgs = {}
+
         print(f"Running multi-experiment with trig_delay={trig_delay} and trig_length={trig_length}")
 
-        for e in self.exps.values():
-            if not e._seq_compiled:
-                e.compile(trig_delay = trig_delay, trig_length = trig_length)
-
+        # Compile all experiments first
         for board_id, exp in self.exps.items():
-            print(f"\nRunning board {board_id}: {type(exp).__name__}")
+            if not exp._seq_compiled:
+                if board_id == 0:
+                    exp.compile(trig_delay=trig_delay, trig_length=trig_length)
+                else:
+                    exp.compile()
+
+        # Separate controller and followers
+        controller = self.exps[0]
+        followers = {
+            board_id: exp
+            for board_id, exp in self.exps.items()
+            if board_id != 0
+        }
+
+        # Run followers in background threads
+        with ThreadPoolExecutor(max_workers=max(1, len(followers))) as executor:
+
+            futures = {}
+
+            for board_id, exp in followers.items():
+                print(f"\nStarting follower board {board_id}: {type(exp).__name__}")
+                futures[board_id] = executor.submit(exp.run)
+
+            # Give followers time to send their run commands and arm
+            time.sleep(0.2)
+
+            # Run controller in main thread (sends trigger)
+            print(f"\nRunning controller board 0: {type(controller).__name__}")
 
             try:
-                # Run normally; compilation happens through the usual path.
-                rxd[board_id], msgs[board_id] = exp.run()
+                rxd[0], msgs[0] = controller.run()
 
             except Exception as e:
-                print(f"Board {board_id} failed: {e}")
-                print("Machine code:", getattr(exp, "_machine_code", None))
+                print(f"Controller failed: {e}")
+                print("Machine code:", getattr(controller, "_machine_code", None))
                 raise
+
+            # Collect follower results
+            for board_id, future in futures.items():
+                try:
+                    rxd[board_id], msgs[board_id] = future.result()
+
+                except Exception as e:
+                    print(f"Follower board {board_id} failed: {e}")
+                    print("Machine code:", getattr(followers[board_id], "_machine_code", None))
+                    raise
 
         return rxd, msgs
 
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-    '''
-    def run(self):
-            """ compile the TX and grad data, send everything over.
-            Returns the resultant data """
-    
-            if not self._seq_compiled:
-                self.compile()
-    
-            if self._flush_old_rx:
-                rx_data_old, _ = sc.command({'read_rx': 0}, self._s)
-                # TODO: do something with RX data previously collected by the server
-    
-            bytecode = self._machine_code.tobytes()
-            log.info("Sending run_seq (%d bytes) to MaRCoS", len(bytecode))
-            try:
-                rx_data, msgs = sc.command({'run_seq': bytecode}, self._s)
-            except (OSError, ConnectionError) as exc:
-                raise ConnectionError(
-                    f"MaRCoS closed while running the sequence ({exc}). "
-                    "Do not Ping during a scan. On the Red Pitaya, watch marcos_server for an MPack error."
-                ) from exc
-    
-            rxd = rx_data[4]['run_seq']
-            rxd_iq = {}
-    
-            # (1 << 24) just for the int->float conversion to be reasonable - exact value doesn't matter for now
-            rx0_norm_factor = self._rx0_cic_factor / (1 << 24)
-            rx1_norm_factor = self._rx0_cic_factor / (1 << 24)
-    
-            try:
-                rxd_iq['rx0'] = rx0_norm_factor * ( np.array(rxd['rx0_i']).astype(np.int32).astype(float) + \
-                                 1j * np.array(rxd['rx0_q']).astype(np.int32).astype(float) )
-            except (KeyError, TypeError):
-                pass
-    
-            try:
-                rxd_iq['rx1'] = rx1_norm_factor * ( np.array(rxd['rx1_i']).astype(np.int32).astype(float) + \
-                                 1j * np.array(rxd['rx1_q']).astype(np.int32).astype(float) )
-            except (KeyError, TypeError):
-                pass
-    
-            return rxd_iq, msgs
-    
-    
-    '''
-
     def close_server(self, only_if_sim=False):
-        
         for exp in self.exps.values():
             exp.close_server(only_if_sim=only_if_sim)

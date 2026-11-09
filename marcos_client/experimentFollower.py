@@ -132,7 +132,7 @@ class ExperimentFollower(exp.Experiment) :
         self._flush_old_rx = flush_old_rx
         self._allow_user_init_cfg = allow_user_init_cfg
 
-    def compile(self):
+    def compile(self, trig_delay=None, trig_length=None):
         super().compile() 
         trig = np.array([insta(ITRIGFOREVER, 0)], dtype=np.uint32)
         self._machine_code = np.concatenate((trig, self._machine_code))
